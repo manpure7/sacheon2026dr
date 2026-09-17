@@ -24,16 +24,224 @@
       }
     }
   </script>
+  <style>
+    /* 드론 비행 애니메이션 (자주, 역동적으로 횡단) */
+    @keyframes flyTrack1 {
+      0% { transform: translate(-12vw, 80vh) rotate(32deg) scale(0.65); opacity: 0; }
+      10% { opacity: 0.35; }
+      90% { opacity: 0.35; }
+      100% { transform: translate(112vw, -10vh) rotate(35deg) scale(0.9); opacity: 0; }
+    }
+    @keyframes flyTrack2 {
+      0% { transform: translate(112vw, 15vh) rotate(-148deg) scale(0.8); opacity: 0; }
+      15% { opacity: 0.3; }
+      85% { opacity: 0.3; }
+      100% { transform: translate(-12vw, 85vh) rotate(-155deg) scale(0.55); opacity: 0; }
+    }
+    @keyframes flyTrack3 {
+      0% { transform: translate(-15vw, 25vh) rotate(14deg) scale(0.5); opacity: 0; }
+      20% { opacity: 0.25; }
+      80% { opacity: 0.25; }
+      100% { transform: translate(115vw, 55vh) rotate(18deg) scale(0.7); opacity: 0; }
+    }
+    @keyframes flyTrack4 {
+      0% { transform: translate(110vw, 75vh) rotate(-165deg) scale(0.7); opacity: 0; }
+      15% { opacity: 0.28; }
+      85% { opacity: 0.28; }
+      100% { transform: translate(-15vw, 35vh) rotate(-160deg) scale(0.5); opacity: 0; }
+    }
+    @keyframes flyTrack5 {
+      0% { transform: translate(20vw, 110vh) rotate(-65deg) scale(0.55); opacity: 0; }
+      15% { opacity: 0.3; }
+      85% { opacity: 0.3; }
+      100% { transform: translate(85vw, -15vh) rotate(-55deg) scale(0.85); opacity: 0; }
+    }
+    @keyframes flyTrack6 {
+      0% { transform: translate(-10vw, 45vh) rotate(8deg) scale(0.4); opacity: 0; }
+      10% { opacity: 0.2; }
+      90% { opacity: 0.2; }
+      100% { transform: translate(110vw, 40vh) rotate(12deg) scale(0.5); opacity: 0; }
+    }
+
+    /* 게이트 네온 펄스 */
+    @keyframes gatePulse {
+      0%, 100% { opacity: 0.15; filter: drop-shadow(0 0 6px rgba(0, 240, 255, 0.4)); }
+      50% { opacity: 0.28; filter: drop-shadow(0 0 14px rgba(0, 240, 255, 0.8)); }
+    }
+    @keyframes gatePulseAmber {
+      0%, 100% { opacity: 0.12; filter: drop-shadow(0 0 6px rgba(245, 158, 11, 0.4)); }
+      50% { opacity: 0.24; filter: drop-shadow(0 0 14px rgba(245, 158, 11, 0.8)); }
+    }
+
+    .animate-gate-cyan { animation: gatePulse 4s ease-in-out infinite; }
+    .animate-gate-amber { animation: gatePulseAmber 5s ease-in-out infinite; }
+
+    /* 드론 주기 및 딜레이 단축 (빠르게 순환) */
+    .drone-1 { animation: flyTrack1 8s cubic-bezier(0.25, 1, 0.5, 1) infinite; animation-delay: 0s; }
+    .drone-2 { animation: flyTrack2 9.5s cubic-bezier(0.25, 1, 0.5, 1) infinite; animation-delay: 1.8s; }
+    .drone-3 { animation: flyTrack3 11s cubic-bezier(0.25, 1, 0.5, 1) infinite; animation-delay: 3.5s; }
+    .drone-4 { animation: flyTrack4 8.5s cubic-bezier(0.25, 1, 0.5, 1) infinite; animation-delay: 5s; }
+    .drone-5 { animation: flyTrack5 10s cubic-bezier(0.25, 1, 0.5, 1) infinite; animation-delay: 2.2s; }
+    .drone-6 { animation: flyTrack6 13s linear infinite; animation-delay: 6.8s; }
+  </style>
 </head>
-<body class="bg-[#080C14] text-slate-200 font-sans antialiased selection:bg-cyan-500 selection:text-black">
+<body class="bg-[#080C14] text-slate-200 font-sans antialiased selection:bg-cyan-500 selection:text-black relative overflow-x-hidden">
+
+  <!-- ================= 배경 트랙 오브젝트 레이어 (게이트 + 장애물 + 날아다니는 드론) ================= -->
+  <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+    
+    <!-- 1. 고정 장애물: 좌상단 네온 아치 게이트 -->
+    <div class="absolute -top-10 left-6 md:left-20 w-44 md:w-64 h-56 md:h-80 animate-gate-cyan">
+      <svg viewBox="0 0 200 240" fill="none" class="w-full h-full">
+        <!-- 둥근 아치형 게이트 프레임 -->
+        <path d="M20 240 V100 A80 80 0 0 1 180 100 V240" stroke="#00F0FF" stroke-width="12" stroke-linecap="round"/>
+        <path d="M20 240 V100 A80 80 0 0 1 180 100 V240" stroke="#FFFFFF" stroke-width="3" stroke-dasharray="10 8"/>
+        <!-- 베이스 말뚝 -->
+        <rect x="8" y="225" width="24" height="15" fill="#00F0FF"/>
+        <rect x="168" y="225" width="24" height="15" fill="#00F0FF"/>
+      </svg>
+    </div>
+
+    <!-- 2. 고정 장애물: 우측 중앙 큐브 다이브 게이트 (사각 장애물) -->
+    <div class="absolute top-1/3 -right-8 md:right-12 w-48 md:w-60 h-48 md:h-60 animate-gate-amber">
+      <svg viewBox="0 0 200 200" fill="none" class="w-full h-full">
+        <!-- 마름모/큐브 형태의 다이브 게이트 -->
+        <rect x="25" y="25" width="150" height="150" rx="16" stroke="#F59E0B" stroke-width="10" transform="rotate(12 100 100)"/>
+        <rect x="25" y="25" width="150" height="150" rx="16" stroke="#FFFFFF" stroke-width="2.5" stroke-dasharray="14 10" transform="rotate(12 100 100)"/>
+        <!-- 코너 네온 마커 -->
+        <circle cx="100" cy="12" r="6" fill="#F59E0B"/>
+        <circle cx="188" cy="100" r="6" fill="#F59E0B"/>
+        <circle cx="100" cy="188" r="6" fill="#F59E0B"/>
+        <circle cx="12" cy="100" r="6" fill="#F59E0B"/>
+      </svg>
+    </div>
+
+    <!-- 3. 고정 장애물: 좌하단 레이싱 깃발 플래그 (슬라럼 폴) -->
+    <div class="absolute bottom-16 left-4 md:left-14 w-28 md:w-36 h-64 md:h-96 animate-gate-cyan">
+      <svg viewBox="0 0 100 280" fill="none" class="w-full h-full">
+        <!-- 슬라럼 폴대 및 깃발 -->
+        <line x1="20" y1="280" x2="20" y2="20" stroke="#38BDF8" stroke-width="6" stroke-linecap="round"/>
+        <path d="M20 30 Q70 60 20 90 Q65 120 20 150 Q60 180 20 210" fill="none" stroke="#00F0FF" stroke-width="7"/>
+        <circle cx="20" cy="20" r="7" fill="#00F0FF"/>
+      </svg>
+    </div>
+
+    <!-- 4. 고정 장애물: 우하단 하프 아치 게이트 -->
+    <div class="absolute -bottom-8 right-8 md:right-28 w-52 md:w-72 h-44 md:h-60 animate-gate-cyan">
+      <svg viewBox="0 0 240 160" fill="none" class="w-full h-full">
+        <path d="M10 160 Q120 10 230 160" stroke="#00F0FF" stroke-width="12" stroke-linecap="round"/>
+        <path d="M10 160 Q120 10 230 160" stroke="#FFFFFF" stroke-width="3" stroke-dasharray="12 10"/>
+      </svg>
+    </div>
+
+    <!-- ===== 날아다니는 레이싱 드론 군단 (6대) ===== -->
+
+    <!-- 드론 1: 시안 고속 배틀기체 -->
+    <div class="absolute drone-1">
+      <div class="relative flex items-center">
+        <div class="w-48 h-[2.5px] bg-gradient-to-r from-transparent via-cyan-400/60 to-cyan-300 blur-[1px]"></div>
+        <svg class="w-14 h-14 -ml-3 text-cyan-400 drop-shadow-[0_0_10px_rgba(6,182,212,0.9)]" viewBox="0 0 64 64" fill="currentColor">
+          <line x1="16" y1="16" x2="48" y2="48" stroke="currentColor" stroke-width="3.5" />
+          <line x1="48" y1="16" x2="16" y2="48" stroke="currentColor" stroke-width="3.5" />
+          <circle cx="16" cy="16" r="8" fill="none" stroke="currentColor" stroke-width="2.5" />
+          <circle cx="48" cy="16" r="8" fill="none" stroke="currentColor" stroke-width="2.5" />
+          <circle cx="16" cy="48" r="8" fill="none" stroke="currentColor" stroke-width="2.5" />
+          <circle cx="48" cy="48" r="8" fill="none" stroke="currentColor" stroke-width="2.5" />
+          <rect x="27" y="22" width="10" height="20" rx="3" fill="#FFFFFF" />
+          <circle cx="32" cy="19" r="4" fill="#00F0FF" />
+        </svg>
+      </div>
+    </div>
+
+    <!-- 드론 2: 앰버/골드 급강하 기체 -->
+    <div class="absolute drone-2">
+      <div class="relative flex items-center">
+        <div class="w-56 h-[3px] bg-gradient-to-r from-transparent via-amber-400/60 to-amber-300 blur-[1px]"></div>
+        <svg class="w-16 h-16 -ml-4 text-amber-400 drop-shadow-[0_0_12px_rgba(245,158,11,0.9)]" viewBox="0 0 64 64" fill="currentColor">
+          <line x1="16" y1="16" x2="48" y2="48" stroke="currentColor" stroke-width="4" />
+          <line x1="48" y1="16" x2="16" y2="48" stroke="currentColor" stroke-width="4" />
+          <circle cx="16" cy="16" r="9" fill="none" stroke="currentColor" stroke-width="3" />
+          <circle cx="48" cy="16" r="9" fill="none" stroke="currentColor" stroke-width="3" />
+          <circle cx="16" cy="48" r="9" fill="none" stroke="currentColor" stroke-width="3" />
+          <circle cx="48" cy="48" r="9" fill="none" stroke="currentColor" stroke-width="3" />
+          <rect x="26" y="21" width="12" height="22" rx="3" fill="#FFFFFF" />
+          <circle cx="32" cy="18" r="4" fill="#F59E0B" />
+        </svg>
+      </div>
+    </div>
+
+    <!-- 드론 3: 스카이블루 선회 기체 -->
+    <div class="absolute drone-3">
+      <div class="relative flex items-center">
+        <div class="w-36 h-[2px] bg-gradient-to-r from-transparent via-sky-400/50 to-sky-200 blur-[1px]"></div>
+        <svg class="w-11 h-11 -ml-2 text-sky-300 drop-shadow-[0_0_8px_rgba(56,189,248,0.8)]" viewBox="0 0 64 64" fill="currentColor">
+          <line x1="16" y1="16" x2="48" y2="48" stroke="currentColor" stroke-width="3" />
+          <line x1="48" y1="16" x2="16" y2="48" stroke="currentColor" stroke-width="3" />
+          <circle cx="16" cy="16" r="7.5" fill="none" stroke="currentColor" stroke-width="2.5" />
+          <circle cx="48" cy="16" r="7.5" fill="none" stroke="currentColor" stroke-width="2.5" />
+          <circle cx="16" cy="48" r="7.5" fill="none" stroke="currentColor" stroke-width="2.5" />
+          <circle cx="48" cy="48" r="7.5" fill="none" stroke="currentColor" stroke-width="2.5" />
+          <rect x="28" y="24" width="8" height="16" rx="2" fill="#FFFFFF" />
+        </svg>
+      </div>
+    </div>
+
+    <!-- 드론 4: 인디고/퍼플 추격 기체 -->
+    <div class="absolute drone-4">
+      <div class="relative flex items-center">
+        <div class="w-44 h-[2px] bg-gradient-to-r from-transparent via-indigo-400/60 to-purple-300 blur-[1px]"></div>
+        <svg class="w-13 h-13 -ml-3 text-indigo-400 drop-shadow-[0_0_9px_rgba(129,140,248,0.9)]" viewBox="0 0 64 64" fill="currentColor">
+          <line x1="16" y1="16" x2="48" y2="48" stroke="currentColor" stroke-width="3" />
+          <line x1="48" y1="16" x2="16" y2="48" stroke="currentColor" stroke-width="3" />
+          <circle cx="16" cy="16" r="8" fill="none" stroke="currentColor" stroke-width="2.5" />
+          <circle cx="48" cy="16" r="8" fill="none" stroke="currentColor" stroke-width="2.5" />
+          <circle cx="16" cy="48" r="8" fill="none" stroke="currentColor" stroke-width="2.5" />
+          <circle cx="48" cy="48" r="8" fill="none" stroke="currentColor" stroke-width="2.5" />
+          <rect x="27" y="23" width="10" height="18" rx="2" fill="#FFFFFF" />
+        </svg>
+      </div>
+    </div>
+
+    <!-- 드론 5: 버티컬 다이브 고속 기체 -->
+    <div class="absolute drone-5">
+      <div class="relative flex items-center">
+        <div class="w-52 h-[2.5px] bg-gradient-to-r from-transparent via-emerald-400/60 to-cyan-300 blur-[1px]"></div>
+        <svg class="w-15 h-15 -ml-3 text-cyan-300 drop-shadow-[0_0_10px_rgba(103,232,249,0.9)]" viewBox="0 0 64 64" fill="currentColor">
+          <line x1="16" y1="16" x2="48" y2="48" stroke="currentColor" stroke-width="3.5" />
+          <line x1="48" y1="16" x2="16" y2="48" stroke="currentColor" stroke-width="3.5" />
+          <circle cx="16" cy="16" r="8.5" fill="none" stroke="currentColor" stroke-width="2.5" />
+          <circle cx="48" cy="16" r="8.5" fill="none" stroke="currentColor" stroke-width="2.5" />
+          <circle cx="16" cy="48" r="8.5" fill="none" stroke="currentColor" stroke-width="2.5" />
+          <circle cx="48" cy="48" r="8.5" fill="none" stroke="currentColor" stroke-width="2.5" />
+          <rect x="27" y="22" width="10" height="20" rx="3" fill="#FFFFFF" />
+        </svg>
+      </div>
+    </div>
+
+    <!-- 드론 6: 원거리 배경 기체 -->
+    <div class="absolute drone-6">
+      <div class="relative flex items-center">
+        <div class="w-28 h-[1.5px] bg-gradient-to-r from-transparent via-cyan-400/40 to-white blur-[1px]"></div>
+        <svg class="w-8 h-8 -ml-2 text-slate-300 drop-shadow-[0_0_6px_rgba(255,255,255,0.7)]" viewBox="0 0 64 64" fill="currentColor">
+          <line x1="16" y1="16" x2="48" y2="48" stroke="currentColor" stroke-width="3" />
+          <line x1="48" y1="16" x2="16" y2="48" stroke="currentColor" stroke-width="3" />
+          <circle cx="16" cy="16" r="7" fill="none" stroke="currentColor" stroke-width="2" />
+          <circle cx="48" cy="16" r="7" fill="none" stroke="currentColor" stroke-width="2" />
+          <circle cx="16" cy="48" r="7" fill="none" stroke="currentColor" stroke-width="2" />
+          <circle cx="48" cy="48" r="7" fill="none" stroke="currentColor" stroke-width="2" />
+          <rect x="29" y="26" width="6" height="12" rx="2" fill="#FFFFFF" />
+        </svg>
+      </div>
+    </div>
+
+  </div>
 
   <!-- 내비게이션 바 -->
   <nav class="fixed top-0 left-0 right-0 z-50 bg-[#080C14]/95 backdrop-blur-md border-b border-slate-800">
     <div class="max-w-6xl mx-auto px-6 h-24 md:h-28 py-2 flex items-center justify-between">
       
-      <!-- 최상단 좌측: 사천에어쇼 공식 로고 영역 (1.5배 확대 적용) -->
+      <!-- 최상단 좌측: 사천에어쇼 공식 로고 영역 (1.5배 확대 유지) -->
       <a href="#" class="flex items-center gap-4 group">
-        <!-- 로고 높이만 1.5배 확대: 기존 h-16 md:h-20 -> h-24 md:h-30 -->
         <img 
           src="./logo.png" 
           alt="2026 사천에어쇼 공식 로고" 
@@ -70,7 +278,7 @@
   </nav>
 
   <!-- 메인: 공식 대회 포스터 & 핵심 CTA 영역 -->
-  <section id="poster" class="pt-36 pb-16 md:pt-44 md:pb-24 bg-[#080C14] border-b border-slate-800">
+  <section id="poster" class="relative z-10 pt-36 pb-16 md:pt-44 md:pb-24 bg-transparent border-b border-slate-800">
     <div class="max-w-4xl mx-auto px-6 text-center">
 
       <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900 border border-slate-700 text-cyan-400 text-xs font-semibold mb-6">
@@ -79,7 +287,7 @@
       </div>
 
       <!-- 공식 포스터 이미지 컨테이너 -->
-      <div class="relative mx-auto max-w-xl rounded-2xl overflow-hidden shadow-[0_10px_50px_rgba(0,0,0,0.8)] border border-slate-700/80 mb-10 group">
+      <div class="relative mx-auto max-w-xl rounded-2xl overflow-hidden shadow-[0_10px_50px_rgba(0,0,0,0.8)] border border-slate-700/80 mb-10 group bg-slate-900">
         <img 
           src="./사천에어쇼_2026_레이싱대회포스터.png" 
           alt="제10회 공군참모총장배 드론 종합경연대회 공식 포스터" 
@@ -89,7 +297,7 @@
       </div>
 
       <!-- 부대 출입 필수 경고 배너 -->
-      <div class="max-w-2xl mx-auto mb-8 p-3.5 rounded-xl bg-amber-500/15 border border-amber-500/30 text-xs md:text-sm text-amber-200 flex items-center justify-center gap-2 shadow-md">
+      <div class="max-w-2xl mx-auto mb-8 p-3.5 rounded-xl bg-amber-500/15 border border-amber-500/30 text-xs md:text-sm text-amber-200 flex items-center justify-center gap-2 shadow-md backdrop-blur-sm">
         <i class="ph-bold ph-warning-circle text-lg shrink-0 text-amber-400"></i>
         <span><strong>필독:</strong> 군부대 출입을 위해 <strong>[2026사천에어쇼 관람신청]</strong>을 필히 완료하셔야 부대 영내 입장이 가능합니다.</span>
       </div>
@@ -109,19 +317,19 @@
 
       <!-- 핵심 요약 카드 -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12 text-left">
-        <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl shadow">
+        <div class="bg-slate-900/90 backdrop-blur-sm border border-slate-800 p-4 rounded-xl shadow">
           <div class="text-slate-400 text-xs mb-1">대회 기간</div>
           <div class="text-white font-bold text-sm">2026. 10. 23 ~ 25</div>
         </div>
-        <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl shadow">
+        <div class="bg-slate-900/90 backdrop-blur-sm border border-slate-800 p-4 rounded-xl shadow">
           <div class="text-slate-400 text-xs mb-1">장소</div>
           <div class="text-white font-bold text-sm">사천공항 야외 행사장</div>
         </div>
-        <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl shadow">
+        <div class="bg-slate-900/90 backdrop-blur-sm border border-slate-800 p-4 rounded-xl shadow">
           <div class="text-slate-400 text-xs mb-1">총 상금</div>
           <div class="text-cyan-400 font-bold text-sm">430만원 (1위 200만)</div>
         </div>
-        <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl shadow">
+        <div class="bg-slate-900/90 backdrop-blur-sm border border-slate-800 p-4 rounded-xl shadow">
           <div class="text-slate-400 text-xs mb-1">시상 훈격</div>
           <div class="text-amber-400 font-bold text-sm">공군참모총장상 (1~4위)</div>
         </div>
@@ -131,14 +339,14 @@
   </section>
 
   <!-- 대회 개요 섹션 -->
-  <section id="about" class="py-20 border-b border-slate-800 bg-[#0B0F17]">
+  <section id="about" class="relative z-10 py-20 border-b border-slate-800 bg-[#0B0F17]/90 backdrop-blur-sm">
     <div class="max-w-5xl mx-auto px-6">
       <div class="text-center mb-12">
         <h2 class="text-2xl md:text-3xl font-extrabold text-white mb-3">대회 개요</h2>
         <p class="text-slate-400 text-sm">대한민국 대표 에어쇼와 함께 펼쳐지는 FPV 드론 스피드 축제</p>
       </div>
 
-      <div class="bg-slate-900/60 border border-slate-800 rounded-2xl overflow-hidden divide-y divide-slate-800 shadow-xl">
+      <div class="bg-slate-900/70 border border-slate-800 rounded-2xl overflow-hidden divide-y divide-slate-800 shadow-xl">
         <div class="grid grid-cols-1 md:grid-cols-4 p-5">
           <div class="text-cyan-400 font-semibold mb-1 md:mb-0">대회 공식 명칭</div>
           <div class="md:col-span-3 text-white font-bold">제10회 공군참모총장배 드론 종합경연대회 (드론 레이싱 부문)</div>
@@ -171,7 +379,7 @@
   </section>
 
   <!-- 대회 일정 섹션 -->
-  <section id="schedule" class="py-20 border-b border-slate-800 bg-[#080C14]">
+  <section id="schedule" class="relative z-10 py-20 border-b border-slate-800 bg-[#080C14]/90 backdrop-blur-sm">
     <div class="max-w-4xl mx-auto px-6">
       <div class="text-center mb-12">
         <h2 class="text-2xl md:text-3xl font-extrabold text-white mb-3">대회 일정</h2>
@@ -204,7 +412,7 @@
   </section>
 
   <!-- 경기 규정 및 종목 섹션 -->
-  <section id="classes" class="py-20 border-b border-slate-800 bg-[#0B0F17]">
+  <section id="classes" class="relative z-10 py-20 border-b border-slate-800 bg-[#0B0F17]/90 backdrop-blur-sm">
     <div class="max-w-5xl mx-auto px-6">
       <div class="text-center mb-12">
         <h2 class="text-2xl md:text-3xl font-extrabold text-white mb-3">경기 종목 및 기체 규격</h2>
@@ -264,7 +472,7 @@
   </section>
 
   <!-- 군부대 보안 및 출입 유의사항 -->
-  <section id="security" class="py-20 border-b border-slate-800 bg-amber-950/15">
+  <section id="security" class="relative z-10 py-20 border-b border-slate-800 bg-amber-950/15">
     <div class="max-w-4xl mx-auto px-6">
       <div class="flex items-center gap-3 mb-6">
         <div class="w-10 h-10 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold">
@@ -299,7 +507,7 @@
   </section>
 
   <!-- 접수 섹션 -->
-  <section id="register" class="py-24 bg-[#080C14]">
+  <section id="register" class="relative z-10 py-24 bg-[#080C14]/90 backdrop-blur-sm">
     <div class="max-w-4xl mx-auto px-6 text-center">
       <h2 class="text-3xl md:text-4xl font-black text-white mb-4">참가 및 출입 신청</h2>
       <p class="text-slate-400 mb-10">
@@ -343,7 +551,7 @@
   </section>
 
   <!-- 푸터 -->
-  <footer class="border-t border-slate-800/80 py-8 text-center text-xs text-slate-500 bg-[#080C14]">
+  <footer class="relative z-10 border-t border-slate-800/80 py-8 text-center text-xs text-slate-500 bg-[#080C14]">
     <p>© 2026 제10회 공군참모총장배 드론 종합경연대회 운영위원회. All rights reserved.</p>
   </footer>
 
