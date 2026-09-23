@@ -11,7 +11,7 @@
   <script>
     const SITE_CONFIG = {
       // 1. 선수 참가신청 구글 설문지 링크
-      REGISTER_URL: "https://forms.google.com",
+      REGISTER_URL: "https://forms.gle/WUKazeeBMYeL63vw5",
 
       // 2. 2026 사천에어쇼 공식 관람신청(부대 출입등록) 링크
       AIRSHOW_URL: "https://govent.co.kr/exh/sacheon2026/index"
@@ -540,7 +540,10 @@
         <h2 class="text-2xl md:text-3xl font-extrabold text-white mb-3">경기 규정 및 기체 규격</h2>
         <p class="text-slate-400 text-sm">군부대 활주로 인근 비행이므로 규정 전파 및 페일세이프 준수가 필수입니다.</p>
         <p class="text-slate-400 text-sm mb-6">상세한 내용은 공식 경기규정 및 참가신청에서 확인해주세요.</p>
-
+		<div class="max-w-2xl mx-auto mb-8 p-3.5 rounded-xl bg-amber-500/15 border border-amber-500/30 text-xs md:text-sm text-amber-200 flex items-center justify-center gap-2 shadow-md backdrop-blur-sm">
+        <i class="ph-bold ph-warning-circle text-lg shrink-0 text-amber-400"></i>
+        <span>부대 내에서 <strong>기체는 3대까지만 소지 및 등록이 가능합니다.</strong></span>
+      </div>
         <!-- 공식 경기규정 PDF 바로가기 버튼[cite: 8] -->
         <div class="flex justify-center">
           <a 
@@ -574,7 +577,7 @@
             </li>
             <li class="flex items-start gap-2">
               <i class="ph-fill ph-check-circle text-cyan-400 mt-1"></i>
-              <span><strong>전압/배터리:</strong> 최대 4S 이하</span>
+              <span><strong>전압/배터리:</strong> 최대 4S 이하 LiPo 및 LiHV</span>
             </li>
             <li class="flex items-start gap-2">
               <i class="ph-fill ph-check-circle text-cyan-400 mt-1"></i>
@@ -582,7 +585,7 @@
             </li>
             <li class="flex items-start gap-2">
               <i class="ph-fill ph-check-circle text-cyan-400 mt-1"></i>
-              <span><strong>LED:</strong> 4발 이상. 영상주파수별 색상변경 필수</span>
+              <span><strong>LED:</strong> 8발 이상(라인은 10cm이상) | 옐로,그린,블루,레드 변경 가능해야함</span>
             </li>
           </ul>
         </div>
@@ -600,7 +603,7 @@
           <ul class="text-sm text-slate-300 space-y-2.5">
             <li class="flex items-start gap-2">
               <i class="ph-fill ph-check-circle text-indigo-400 mt-1"></i>
-              <span><strong>VTX 종류:</strong> DJI 디지탈(대역폭 20mhz 레이스 밴드)</span>
+              <span><strong>VTX 종류:</strong> DJI O4 Air Unit 및 DJI O4 Air Unit Pro </span>
             </li>
             <li class="flex items-start gap-2">
               <i class="ph-fill ph-check-circle text-indigo-400 mt-1"></i>
