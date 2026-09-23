@@ -4,6 +4,30 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>제10회 공군참모총장배 드론 종합경연대회 (2026 사천에어쇼)</title>
+
+  <!-- ========================================================
+       [★ 핵심 설정] 링크 주소 변수 지정 (여기서만 수정하면 전체 적용)
+       ======================================================== -->
+  <script>
+    const SITE_CONFIG = {
+      // 1. 선수 참가신청 구글 설문지 링크
+      REGISTER_URL: "https://forms.google.com",
+
+      // 2. 2026 사천에어쇼 공식 관람신청(부대 출입등록) 링크
+      AIRSHOW_URL: "https://govent.co.kr/exh/sacheon2026/index"
+    };
+
+    // DOM 로드 완료 후 모든 해당 링크 일괄 자동 주입
+    document.addEventListener("DOMContentLoaded", () => {
+      document.querySelectorAll(".link-register").forEach(el => {
+        el.href = SITE_CONFIG.REGISTER_URL;
+      });
+      document.querySelectorAll(".link-airshow").forEach(el => {
+        el.href = SITE_CONFIG.AIRSHOW_URL;
+      });
+    });
+  </script>
+
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Phosphor Icons CDN -->
@@ -94,7 +118,7 @@
   <!-- ================= 배경 트랙 오브젝트 레이어 (F-5 전투기 장애물 + 게이트 + 드론) ================= -->
   <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
     
-    <!-- 1. [신규 장애물] 우측 하단: 지상 F-5 타이거 전투기 실루엣 게이트 -->
+    <!-- 1. 우측 하단: 지상 F-5 타이거 전투기 실루엣 게이트[cite: 8] -->
     <div class="absolute bottom-12 -right-16 md:right-10 w-72 md:w-96 h-56 md:h-80 animate-f5 rotate-[-12deg]">
       <svg viewBox="0 0 300 240" fill="none" class="w-full h-full">
         <path d="M150 15 L143 55 L136 90 L134 175 L144 210 L156 210 L166 175 L164 90 L157 55 Z" fill="#0B132B" stroke="#00F0FF" stroke-width="2.5"/>
@@ -111,7 +135,7 @@
       </svg>
     </div>
 
-    <!-- 2. [신규 장애물] 좌측 중앙: F-5 측면 전투기 장애물 실루엣 -->
+    <!-- 2. 좌측 중앙: F-5 측면 전투기 장애물 실루엣[cite: 8] -->
     <div class="absolute top-1/2 -left-12 md:left-6 w-60 md:w-80 h-36 md:h-48 animate-f5 rotate-[15deg]">
       <svg viewBox="0 0 280 120" fill="none" class="w-full h-full">
         <path d="M15 62 Q55 58 105 52 Q150 48 200 48 L255 25 L258 55 L265 68 L240 72 L200 68 L120 68 Z" fill="#091326" stroke="#38BDF8" stroke-width="2"/>
@@ -122,7 +146,7 @@
       </svg>
     </div>
 
-    <!-- 3. 고정 장애물: 좌상단 네온 아치 게이트 -->
+    <!-- 3. 좌상단 네온 아치 게이트[cite: 8] -->
     <div class="absolute -top-10 left-6 md:left-24 w-44 md:w-64 h-56 md:h-80 animate-gate-cyan">
       <svg viewBox="0 0 200 240" fill="none" class="w-full h-full">
         <path d="M20 240 V100 A80 80 0 0 1 180 100 V240" stroke="#00F0FF" stroke-width="12" stroke-linecap="round"/>
@@ -132,7 +156,7 @@
       </svg>
     </div>
 
-    <!-- 4. 고정 장애물: 우측 상단 다이브 큐브 게이트 -->
+    <!-- 4. 우측 상단 다이브 큐브 게이트[cite: 8] -->
     <div class="absolute top-24 -right-8 md:right-16 w-40 md:w-52 h-40 md:h-52 animate-gate-amber">
       <svg viewBox="0 0 200 200" fill="none" class="w-full h-full">
         <rect x="25" y="25" width="150" height="150" rx="16" stroke="#F59E0B" stroke-width="9" transform="rotate(15 100 100)"/>
@@ -142,7 +166,7 @@
       </svg>
     </div>
 
-    <!-- ===== 비행하는 FPV 레이싱 드론 6대 ===== -->
+    <!-- 6대 드론 비행 트랙[cite: 8] -->
     <div class="absolute drone-1">
       <div class="relative flex items-center">
         <div class="w-48 h-[2.5px] bg-gradient-to-r from-transparent via-cyan-400/60 to-cyan-300 blur-[1px]"></div>
@@ -158,7 +182,6 @@
         </svg>
       </div>
     </div>
-
     <div class="absolute drone-2">
       <div class="relative flex items-center">
         <div class="w-56 h-[3px] bg-gradient-to-r from-transparent via-amber-400/60 to-amber-300 blur-[1px]"></div>
@@ -174,7 +197,6 @@
         </svg>
       </div>
     </div>
-
     <div class="absolute drone-3">
       <div class="relative flex items-center">
         <div class="w-36 h-[2px] bg-gradient-to-r from-transparent via-sky-400/50 to-sky-200 blur-[1px]"></div>
@@ -189,7 +211,6 @@
         </svg>
       </div>
     </div>
-
     <div class="absolute drone-4">
       <div class="relative flex items-center">
         <div class="w-44 h-[2px] bg-gradient-to-r from-transparent via-indigo-400/60 to-purple-300 blur-[1px]"></div>
@@ -204,7 +225,6 @@
         </svg>
       </div>
     </div>
-
     <div class="absolute drone-5">
       <div class="relative flex items-center">
         <div class="w-52 h-[2.5px] bg-gradient-to-r from-transparent via-emerald-400/60 to-cyan-300 blur-[1px]"></div>
@@ -219,7 +239,6 @@
         </svg>
       </div>
     </div>
-
     <div class="absolute drone-6">
       <div class="relative flex items-center">
         <div class="w-28 h-[1.5px] bg-gradient-to-r from-transparent via-cyan-400/40 to-white blur-[1px]"></div>
@@ -234,14 +253,13 @@
         </svg>
       </div>
     </div>
-
   </div>
 
-  <!-- 내비게이션 바 (가로폭 확장 및 줄바꿈 완전 방지 적용) -->
+  <!-- 내비게이션 바[cite: 8] -->
   <nav class="fixed top-0 left-0 right-0 z-50 bg-[#080C14]/95 backdrop-blur-md border-b border-slate-800">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 h-24 md:h-28 py-2 flex items-center justify-between gap-2">
       
-      <!-- 좌측: 로고 및 타이틀 (줄바꿈 방지) -->
+      <!-- 좌측: 로고 및 타이틀[cite: 8] -->
       <a href="#" class="flex items-center gap-3 sm:gap-4 shrink-0 group">
         <img 
           src="./logo.png" 
@@ -255,7 +273,7 @@
         </span>
       </a>
 
-      <!-- 중앙 메뉴 링크 (여백 및 폰트 크기 반응형 최적화) -->
+      <!-- 중앙 메뉴 링크[cite: 8] -->
       <div class="hidden lg:flex items-center gap-6 xl:gap-8 text-sm font-medium text-slate-300 whitespace-nowrap">
         <a href="#poster" class="hover:text-cyan-400 transition-colors">공식포스터</a>
         <a href="#about" class="hover:text-cyan-400 transition-colors">대회개요</a>
@@ -264,20 +282,20 @@
         <a href="#security" class="hover:text-amber-400 transition-colors">출입/보안안내</a>
       </div>
       
-      <!-- 우측 액션 버튼 그룹 (줄바꿈 완전 방지) -->
+      <!-- 우측 액션 버튼 그룹 (link-airshow, link-register 적용)[cite: 8] -->
       <div class="flex items-center gap-2 sm:gap-3 shrink-0">
-        <a href="https://govent.co.kr/exh/sacheon2026/index" target="_blank" rel="noopener noreferrer" class="hidden sm:inline-flex items-center gap-1.5 bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/40 font-semibold px-3 py-2 md:px-3.5 md:py-2 rounded-lg text-xs md:text-sm whitespace-nowrap transition-all">
+        <a href="#" target="_blank" rel="noopener noreferrer" class="link-airshow hidden sm:inline-flex items-center gap-1.5 bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/40 font-semibold px-3 py-2 md:px-3.5 md:py-2 rounded-lg text-xs md:text-sm whitespace-nowrap transition-all">
           <i class="ph-bold ph-ticket"></i>
           사천에어쇼 관람신청
         </a>
-        <a href="#register" class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold px-3 py-2 md:px-4 md:py-2 rounded-lg text-xs md:text-sm whitespace-nowrap transition-all shadow-[0_0_15px_rgba(6,182,212,0.3)]">
+        <a href="#" target="_blank" rel="noopener noreferrer" class="link-register bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold px-3 py-2 md:px-4 md:py-2 rounded-lg text-xs md:text-sm whitespace-nowrap transition-all shadow-[0_0_15px_rgba(6,182,212,0.3)]">
           대회참가신청(선착순40명)
         </a>
       </div>
     </div>
   </nav>
 
-  <!-- 메인: 공식 대회 포스터 & 핵심 CTA 영역 -->
+  <!-- 메인: 공식 대회 포스터 & 핵심 CTA 영역[cite: 8] -->
   <section id="poster" class="relative z-10 pt-36 pb-16 md:pt-44 md:pb-24 bg-transparent border-b border-slate-800">
     <div class="max-w-4xl mx-auto px-6 text-center">
 
@@ -286,7 +304,7 @@
         공군 사천공항 야외 행사장 특설 트랙 (F-5 장애물 코스)
       </div>
 
-      <!-- 공식 포스터 이미지 컨테이너 -->
+      <!-- 공식 포스터 이미지 컨테이너[cite: 8] -->
       <div class="relative mx-auto max-w-xl rounded-2xl overflow-hidden shadow-[0_10px_50px_rgba(0,0,0,0.8)] border border-slate-700/80 mb-10 group bg-slate-900">
         <img 
           src="./poster_2026_sachen.png" 
@@ -296,26 +314,26 @@
         />
       </div>
 
-      <!-- 부대 출입 필수 경고 배너 -->
+      <!-- 부대 출입 필수 경고 배너[cite: 8] -->
       <div class="max-w-2xl mx-auto mb-8 p-3.5 rounded-xl bg-amber-500/15 border border-amber-500/30 text-xs md:text-sm text-amber-200 flex items-center justify-center gap-2 shadow-md backdrop-blur-sm">
         <i class="ph-bold ph-warning-circle text-lg shrink-0 text-amber-400"></i>
         <span><strong>필독:</strong> 군부대 출입을 위해 <strong>[2026사천에어쇼 관람신청]</strong>을 필히 완료하셔야 부대 영내 입장이 가능합니다.</span>
       </div>
 
-      <!-- CTA 버튼 영역 -->
+      <!-- CTA 버튼 영역 (link-register, link-airshow 적용)[cite: 8] -->
       <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-        <a href="https://forms.google.com" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-black px-8 py-4 rounded-xl shadow-[0_0_25px_rgba(6,182,212,0.35)] transition-all transform hover:-translate-y-0.5 text-base">
+        <a href="#" target="_blank" rel="noopener noreferrer" class="link-register w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-black px-8 py-4 rounded-xl shadow-[0_0_25px_rgba(6,182,212,0.35)] transition-all transform hover:-translate-y-0.5 text-base">
           <i class="ph-bold ph-paper-plane-tilt text-xl"></i>
           대회참가신청(선착순40명)
         </a>
         
-        <a href="https://govent.co.kr/exh/sacheon2026/index" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black px-8 py-4 rounded-xl shadow-[0_0_20px_rgba(245,158,11,0.35)] transition-all transform hover:-translate-y-0.5 text-base">
+        <a href="#" target="_blank" rel="noopener noreferrer" class="link-airshow w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black px-8 py-4 rounded-xl shadow-[0_0_20px_rgba(245,158,11,0.35)] transition-all transform hover:-translate-y-0.5 text-base">
           <i class="ph-bold ph-ticket text-xl"></i>
           2026사천에어쇼 관람신청
         </a>
       </div>
 
-      <!-- 핵심 요약 카드 -->
+      <!-- 핵심 요약 카드[cite: 8] -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12 text-left">
         <div class="bg-slate-900/90 backdrop-blur-sm border border-slate-800 p-4 rounded-xl shadow">
           <div class="text-slate-400 text-xs mb-1">대회 기간</div>
@@ -338,7 +356,7 @@
     </div>
   </section>
 
-  <!-- 대회 개요 섹션 -->
+  <!-- 대회 개요 섹션[cite: 8] -->
   <section id="about" class="relative z-10 py-20 border-b border-slate-800 bg-[#0B0F17]/90 backdrop-blur-sm">
     <div class="max-w-5xl mx-auto px-6">
       <div class="text-center mb-12">
@@ -372,13 +390,13 @@
         </div>
         <div class="grid grid-cols-1 md:grid-cols-4 p-5">
           <div class="text-cyan-400 font-semibold mb-1 md:mb-0">참가 자격</div>
-          <div class="md:col-span-3 text-slate-300">FPV 드론 조종자, 초경량비행장치무인콥터 4종 자격 보유자</div>
+          <div class="md:col-span-3 text-slate-300">FPV 드론 조종자, 초경량비행장치무인콥터 4종 자격 보유자 (참가비 무료)</div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- 대회 상세 일정 섹션 (태그 오류 완전 수정) -->
+  <!-- 대회 상세 일정 섹션[cite: 8] -->
   <section id="schedule" class="relative z-10 py-20 border-b border-slate-800 bg-[#080C14]/90 backdrop-blur-sm">
     <div class="max-w-5xl mx-auto px-6">
       
@@ -391,7 +409,7 @@
         <p class="text-slate-400 text-sm">3일간의 비행 검차, 예선 및 공군 에어쇼 연계 공식 타임테이블</p>
       </div>
 
-      <!-- 상세 테이블 컨테이너 -->
+      <!-- 상세 테이블 컨테이너[cite: 8] -->
       <div class="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-900/70 shadow-2xl">
         <table class="w-full text-left border-collapse text-xs md:text-sm whitespace-nowrap md:whitespace-normal">
           <thead>
@@ -404,7 +422,7 @@
           </thead>
           <tbody class="divide-y divide-slate-800/80 text-slate-200">
             
-            <!-- 10/23 (금) -->
+            <!-- 10/23 (금)[cite: 8] -->
             <tr class="bg-cyan-950/15">
               <td class="py-4 px-4 md:px-6 text-center font-bold text-cyan-400 bg-slate-950/40 border-r border-slate-800/80">
                 10/23<br/><span class="text-[11px] text-slate-400 font-normal">(금)</span>
@@ -414,7 +432,7 @@
               <td class="py-4 px-4 md:px-6 text-center text-slate-500 font-mono">-</td>
             </tr>
 
-            <!-- 10/24 (토) -->
+            <!-- 10/24 (토)[cite: 8] -->
             <tr>
               <td rowspan="8" class="py-4 px-4 md:px-6 text-center font-bold text-cyan-400 bg-slate-950/40 border-r border-slate-800/80">
                 10/24<br/><span class="text-[11px] text-slate-400 font-normal">(토)</span>
@@ -459,7 +477,7 @@
               <td class="py-3 px-4 md:px-6 text-center text-slate-500 font-mono">-</td>
             </tr>
 
-            <!-- 10/25 (일) -->
+            <!-- 10/25 (일)[cite: 8] -->
             <tr class="border-t-2 border-slate-700/80">
               <td rowspan="7" class="py-4 px-4 md:px-6 text-center font-bold text-amber-400 bg-slate-950/40 border-r border-slate-800/80">
                 10/25<br/><span class="text-[11px] text-slate-400 font-normal">(일)</span>
@@ -506,7 +524,7 @@
         </table>
       </div>
 
-      <!-- 안내 문구 -->
+      <!-- 안내 문구[cite: 8] -->
       <div class="mt-4 flex items-center gap-2 text-xs text-slate-400">
         <i class="ph-bold ph-info text-cyan-400 text-sm"></i>
         <span>에어쇼 비행 시간대(10:40~11:15 / 14:20~14:55)에는 안전 및 영공 통제로 인해 기체 전원 인가가 전면 통제됩니다.</span>
@@ -515,7 +533,7 @@
     </div>
   </section>
 
-  <!-- 경기 규정 및 종목 섹션 (PDF 규정 링크 버튼 추가) -->
+  <!-- 경기 규정 및 종목 섹션[cite: 8] -->
   <section id="classes" class="relative z-10 py-20 border-b border-slate-800 bg-[#0B0F17]/90 backdrop-blur-sm">
     <div class="max-w-5xl mx-auto px-6">
       <div class="text-center mb-10">
@@ -523,7 +541,7 @@
         <p class="text-slate-400 text-sm">군부대 활주로 인근 비행이므로 규정 전파 및 페일세이프 준수가 필수입니다.</p>
         <p class="text-slate-400 text-sm mb-6">상세한 내용은 공식 경기규정 및 참가신청에서 확인해주세요.</p>
 
-        <!-- 공식 경기규정 PDF 바로가기 버튼 -->
+        <!-- 공식 경기규정 PDF 바로가기 버튼[cite: 8] -->
         <div class="flex justify-center">
           <a 
             href="./sacheon_rule.pdf" 
@@ -598,7 +616,7 @@
     </div>
   </section>
 
-  <!-- 군부대 보안 및 출입 유의사항 -->
+  <!-- 군부대 보안 및 출입 유의사항[cite: 8] -->
   <section id="security" class="relative z-10 py-20 border-b border-slate-800 bg-amber-950/15">
     <div class="max-w-4xl mx-auto px-6">
       <div class="flex items-center gap-3 mb-6">
@@ -624,8 +642,9 @@
           <li><strong>비행 안전:</strong> 참가기체는 지정된 레이싱 트랙 및 네트(그물망) 내부에서 절대로 벗어날 수 없습니다.</li>
         </ul>
 
+        <!-- 에어쇼 사전등록 링크 (link-airshow 적용)[cite: 8] -->
         <div class="pt-2">
-          <a href="https://govent.co.kr/exh/sacheon2026/index" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-amber-400 hover:text-amber-300 font-semibold underline underline-offset-4">
+          <a href="#" target="_blank" rel="noopener noreferrer" class="link-airshow inline-flex items-center gap-2 text-amber-400 hover:text-amber-300 font-semibold underline underline-offset-4">
             사천에어쇼 사전등록 시스템 바로가기 <i class="ph-bold ph-arrow-square-out"></i>
           </a>
         </div>
@@ -633,7 +652,7 @@
     </div>
   </section>
 
-  <!-- 접수 섹션 -->
+  <!-- 접수 섹션[cite: 8] -->
   <section id="register" class="relative z-10 py-24 bg-[#080C14]/90 backdrop-blur-sm">
     <div class="max-w-4xl mx-auto px-6 text-center">
       <h2 class="text-3xl md:text-4xl font-black text-white mb-4">참가 및 출입 신청</h2>
@@ -642,7 +661,7 @@
       </p>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
-        <!-- 1단계: 드론레이싱 대회 참가 신청 -->
+        <!-- 1단계: 드론레이싱 대회 참가 신청 (link-register 적용)[cite: 8] -->
         <div class="bg-slate-900 border border-cyan-500/40 rounded-2xl p-7 flex flex-col justify-between shadow-xl">
           <div>
             <div class="inline-block px-2.5 py-1 rounded bg-cyan-500/20 text-cyan-400 font-bold text-xs mb-4">
@@ -650,15 +669,15 @@
             </div>
             <h3 class="text-xl font-bold text-white mb-2">드론대회 참가 신청</h3>
             <p class="text-xs text-slate-400 mb-6 leading-relaxed">
-              조종자 정보, VTX 주파수 세팅, 기체 스펙(2.5인치 후프) 및 선수 배정 등록용 양식입니다.
+              조종자 정보, VTX 주파수 세팅, 기체 스펙(2.5인치 후프) 및 선수 배정 등록용 양식입니다. 참가비는 무료입니다.
             </p>
           </div>
-          <a href="https://forms.google.com" target="_blank" rel="noopener noreferrer" class="w-full text-center py-3.5 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black rounded-xl text-base transition-all shadow-[0_0_15px_rgba(6,182,212,0.3)]">
+          <a href="#" target="_blank" rel="noopener noreferrer" class="link-register w-full text-center py-3.5 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black rounded-xl text-base transition-all shadow-[0_0_15px_rgba(6,182,212,0.3)]">
             대회참가신청(선착순40명) <i class="ph-bold ph-paper-plane-tilt ml-1"></i>
           </a>
         </div>
 
-        <!-- 2단계: 사천에어쇼 관람신청 (부대 출입등록) -->
+        <!-- 2단계: 사천에어쇼 관람신청 (link-airshow 적용)[cite: 8] -->
         <div class="bg-slate-900 border border-amber-500/40 rounded-2xl p-7 flex flex-col justify-between shadow-xl">
           <div>
             <div class="inline-block px-2.5 py-1 rounded bg-amber-500/20 text-amber-400 font-bold text-xs mb-4">
@@ -669,7 +688,7 @@
               공군 사천공항 영내 입장용 공식 등록입니다. <strong>선수 본인 및 동반인 전원 필수 등록</strong>입니다.
             </p>
           </div>
-          <a href="https://govent.co.kr/exh/sacheon2026/index" target="_blank" rel="noopener noreferrer" class="w-full text-center py-3.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black rounded-xl text-base transition-all shadow-[0_0_15px_rgba(245,158,11,0.3)]">
+          <a href="#" target="_blank" rel="noopener noreferrer" class="link-airshow w-full text-center py-3.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black rounded-xl text-base transition-all shadow-[0_0_15px_rgba(245,158,11,0.3)]">
             2026사천에어쇼 관람신청 <i class="ph-bold ph-ticket ml-1"></i>
           </a>
         </div>
@@ -677,11 +696,11 @@
     </div>
   </section>
 
-  <!-- 푸터 & 참가 문의 영역 -->
+  <!-- 푸터 & 참가 문의 영역[cite: 8] -->
   <footer class="relative z-10 border-t border-slate-800/80 py-12 text-center text-xs text-slate-500 bg-[#080C14]">
     <div class="max-w-4xl mx-auto px-6 space-y-4">
       
-      <!-- 선수 및 참가 문의 안내 박스 -->
+      <!-- 선수 및 참가 문의 안내 박스[cite: 8] -->
       <div class="inline-flex flex-col sm:flex-row items-center justify-center gap-2 p-3 rounded-xl bg-slate-900/80 border border-slate-800 text-slate-300 mb-2">
         <span class="flex items-center gap-1.5 font-semibold text-cyan-400">
           <i class="ph-bold ph-envelope-simple text-base"></i>
