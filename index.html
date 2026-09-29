@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html lang="ko" class="scroll-smooth">
-<!-- ========================================================
-       [★ 핵심 설정] C열(이름) + G열(생년월일) 기준 중복 제거 및 40명 자동 마감
-       ======================================================== -->
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>제10회 공군참모총장배 드론 종합경연대회 (2026 사천에어쇼)</title>
+
+  <!-- =========================================================================
+       [★ 핵심 설정] C열(이름)+G열(생년월일) 중복제거 + 클릭 시 실시간 재확인 2중 방어
+       ========================================================================= -->
   <script>
     const SITE_CONFIG = {
       // 1. 선수 참가신청 구글 설문지 링크
@@ -14,14 +19,14 @@
       // 3. 접수 인원 체크용 구글 스프레드시트 정보
       SHEET_ID: "1JI-XKf_R3ZMVjhvkh5jfyxY2MElv-bG9w4ZJz7DPbHs",
       SHEET_GID: "669171116",
-      MAX_COUNT: 40, // 제한 정원 (40명)
+      MAX_COUNT: 40, // 선착순 정원
 
       // 4. [열 위치 지정] C열 = 2, G열 = 6
-      COL_C_INDEX: 2, // C열 (이름 또는 생년월일)
-      COL_G_INDEX: 6  // G열 (생년월일 또는 이름)
+      COL_C_INDEX: 2,
+      COL_G_INDEX: 6
     };
 
-    // 마감 상태 적용 함수 (버튼 링크 해제 및 마감 문구 변경)
+    // 마감 버튼 UI 전환 함수
     function applyClosedStatus() {
       document.querySelectorAll(".link-register").forEach(el => {
         el.removeAttribute("href");
@@ -38,63 +43,73 @@
       });
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
-      // 기본 사천에어쇼 관람신청 링크 주입
+    // 구글 시트에서 고유 접수자 수 조회하는 함수 (캐시 방지 적용)
+    async function getValidApplicantCount() {
+      const gvizUrl = `https://docs.google.com/spreadsheets/d/${SITE_CONFIG.SHEET_ID}/gviz/tq?tqx=out:json&gid=${SITE_CONFIG.SHEET_GID}&_nocache=${Date.now()}`;
+      try {
+        const res = await fetch(gvizUrl);
+        const data = await res.text();
+        const jsonString = data.substring(data.indexOf("{"), data.lastIndexOf("}") + 1);
+        const parsed = JSON.parse(jsonString);
+        const rows = parsed.table.rows || [];
+
+        const uniqueApplicants = new Set();
+        rows.forEach(row => {
+          if (!row || !row.c) return;
+          const cellC = row.c[SITE_CONFIG.COL_C_INDEX];
+          const cellG = row.c[SITE_CONFIG.COL_G_INDEX];
+
+          const rawValC = cellC && cellC.v !== null ? String(cellC.v) : "";
+          const rawValG = cellG && cellG.v !== null ? String(cellG.v) : "";
+
+          // 공백 및 특수문자 제거 후 정규화
+          const cleanValC = rawValC.replace(/[^0-9a-zA-Z가-힣]/g, "").trim();
+          const cleanValG = rawValG.replace(/[^0-9a-zA-Z가-힣]/g, "").trim();
+
+          // C열과 G열이 모두 채워진 유효 행만 고유키로 묶음
+          if (cleanValC !== "" && cleanValG !== "") {
+            uniqueApplicants.add(`${cleanValC}_${cleanValG}`);
+          }
+        });
+        return uniqueApplicants.size;
+      } catch (err) {
+        console.warn("시트 확인 오류(공유 권한 확인 필요):", err);
+        return 0;
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      // 1. 관람신청 링크 주입
       document.querySelectorAll(".link-airshow").forEach(el => {
         el.href = SITE_CONFIG.AIRSHOW_URL;
       });
 
-      // 기본 대회참가신청 링크 주입
+      // 2. [페이지 접속 시] 1차 인원 체크
+      const currentCount = await getValidApplicantCount();
+      if (currentCount >= SITE_CONFIG.MAX_COUNT) {
+        applyClosedStatus();
+        return;
+      }
+
+      // 3. 정원 미달인 경우 신청 버튼에 클릭 리스너 연결
       document.querySelectorAll(".link-register").forEach(el => {
         el.href = SITE_CONFIG.REGISTER_URL;
-      });
 
-      // 구글 스프레드시트 실시간 데이터 조회 (GViz API)
-      const gvizUrl = `https://docs.google.com/spreadsheets/d/${SITE_CONFIG.SHEET_ID}/gviz/tq?tqx=out:json&gid=${SITE_CONFIG.SHEET_GID}`;
+        // [버튼 클릭 시] 2차 실시간 재확인
+        el.addEventListener("click", async (e) => {
+          e.preventDefault(); // 순간 대기
 
-      fetch(gvizUrl)
-        .then(res => res.text())
-        .then(data => {
-          // JSON 데이터 추출 및 파싱
-          const jsonString = data.substring(data.indexOf("{"), data.lastIndexOf("}") + 1);
-          const parsed = JSON.parse(jsonString);
-          const rows = parsed.table.rows || [];
+          const latestCount = await getValidApplicantCount();
 
-          // 중복 방지용 고유 인원 보관 (Set)
-          const uniqueApplicants = new Set();
-
-          rows.forEach(row => {
-            if (!row || !row.c) return;
-
-            const cellC = row.c[SITE_CONFIG.COL_C_INDEX];
-            const cellG = row.c[SITE_CONFIG.COL_G_INDEX];
-
-            // C열과 G열 값 확인 (null 방지)
-            const rawValC = cellC && cellC.v !== null ? String(cellC.v) : "";
-            const rawValG = cellG && cellG.v !== null ? String(cellG.v) : "";
-
-            // 공백 및 특수기호(-, / 등) 제거 후 정규화
-            const cleanValC = rawValC.replace(/[^0-9a-zA-Z가-힣]/g, "").trim();
-            const cleanValG = rawValG.replace(/[^0-9a-zA-Z가-힣]/g, "").trim();
-
-            // C열과 G열 데이터가 모두 채워져 있는 유효한 행만 조합하여 카운트
-            if (cleanValC !== "" && cleanValG !== "") {
-              const uniqueKey = `${cleanValC}_${cleanValG}`;
-              uniqueApplicants.add(uniqueKey);
-            }
-          });
-
-          // 중복을 제외한 고유 접수자 수
-          const totalValidCount = uniqueApplicants.size;
-
-          // 고유 접수자가 40명 이상이면 마감 처리 실행
-          if (totalValidCount >= SITE_CONFIG.MAX_COUNT) {
+          if (latestCount >= SITE_CONFIG.MAX_COUNT) {
+            alert("선착순 40명 접수가 마감되었습니다.");
             applyClosedStatus();
+          } else {
+            // 아직 40명 미만이면 설문지 창 열기
+            window.open(SITE_CONFIG.REGISTER_URL, "_blank");
           }
-        })
-        .catch(err => {
-          console.warn("스프레드시트 데이터 연동 확인 필요 (시트 공유 권한 확인):", err);
         });
+      });
     });
   </script>
 
