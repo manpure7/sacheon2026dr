@@ -11,20 +11,38 @@
   <!-- =========================================================================
        [★ 핵심 설정] 참가신청 강제 마감 모드 (클릭 차단 및 마감 안내 알림)
        ========================================================================= -->
+  <!-- =========================================================================
+       [★ 핵심 설정] 참가신청 마감 모드 및 대회/이벤트 결과 변수 설정
+       ========================================================================= -->
   <script>
     const SITE_CONFIG = {
       // 1. 2026 사천에어쇼 공식 관람신청 링크 (관람신청은 유지)
       AIRSHOW_URL: "https://govent.co.kr/exh/sacheon2026/index"
     };
 
+    // [★ 결과 입력란] 이곳의 값만 수정하면 홈페이지 결과창에 자동으로 반영됩니다.
+    const EVENT_RESULTS = {
+      // 1. 드론레이싱 본선 결과
+      racing: {
+        rank1_name: "김민재", // 1위 선수 이름
+        rank2_name: "이동현", // 2위 선수 이름
+        rank3_name: "황성현", // 3위 선수 이름
+        rank4_name: "김동휘"  // 4위 선수 이름
+      },
+      // 2. 관람객 드론 시뮬레이션 이벤트 결과 (매일 1명)
+      simulation: {
+        day1: { date: "10월 22일(목)", name: "이*훈", phone: "2966", time: "00:24.07" },
+        day2: { date: "10월 23일(금)", name: "강*영", phone: "2969", time: "00:16.54" },
+        day3: { date: "10월 24일(토)", name: "김*윤", phone: "6272", time: "00:16.19" },
+        day4: { date: "10월 25일(일)", name: "최*혁", phone: "2365", time: "00:15.53" }
+      }
+    };
+
     // 마감 버튼 UI 강제 고정 및 알림창 등록
     function enforceClosedStatus() {
       document.querySelectorAll(".link-register").forEach(el => {
-        // 기존 링크 및 새 창 열기 속성 완전 제거
         el.removeAttribute("href");
         el.removeAttribute("target");
-
-        // 스타일을 비활성화(잠김) 디자인으로 일괄 전환
         el.classList.remove(
           "hover:bg-cyan-400", "bg-cyan-500", "from-cyan-500", "to-blue-600",
           "hover:from-cyan-400", "hover:to-blue-500"
@@ -33,11 +51,7 @@
           "bg-slate-700", "text-slate-400", "border", "border-slate-600",
           "cursor-pointer", "opacity-80"
         );
-
-        // 버튼 문구 '선수신청 마감'으로 통일
         el.innerHTML = `<i class="ph-bold ph-lock-key text-base mr-1"></i>선수신청 마감`;
-
-        // 버튼 클릭 시 '신청 마감' 경고창 출력
         el.addEventListener("click", (e) => {
           e.preventDefault();
           alert("제10회 공군참모총장배 드론 종합경연대회 선수 모집(선착순 40명)이 마감되었습니다. 성원에 감사드립니다.");
@@ -53,6 +67,22 @@
 
       // 2. 신청 버튼 즉시 마감 잠금 적용
       enforceClosedStatus();
+
+      // 3. 대회 결과 화면 자동 렌더링
+      if(document.getElementById("result-racing-1")) {
+        document.getElementById("result-racing-1").innerText = EVENT_RESULTS.racing.rank1_name;
+        document.getElementById("result-racing-2").innerText = EVENT_RESULTS.racing.rank2_name;
+        document.getElementById("result-racing-3").innerText = EVENT_RESULTS.racing.rank3_name;
+        document.getElementById("result-racing-4").innerText = EVENT_RESULTS.racing.rank4_name;
+
+        ['day1', 'day2', 'day3', 'day4'].forEach((day, index) => {
+            const num = index + 1;
+            document.getElementById(`sim-date-${num}`).innerText = EVENT_RESULTS.simulation[day].date;
+            document.getElementById(`sim-name-${num}`).innerText = EVENT_RESULTS.simulation[day].name;
+            document.getElementById(`sim-phone-${num}`).innerText = EVENT_RESULTS.simulation[day].phone;
+            document.getElementById(`sim-time-${num}`).innerText = EVENT_RESULTS.simulation[day].time;
+        });
+      }
     });
   </script>
 
@@ -383,7 +413,133 @@
 
     </div>
   </section>
+<!-- ================= 대회 및 이벤트 결과 발표 섹션 ================= -->
+  <section id="results" class="relative z-10 py-16 border-b border-slate-800 bg-[#050811]/95 backdrop-blur-md">
+    <div class="max-w-5xl mx-auto px-6">
+      
+      <div class="text-center mb-10">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/40 text-amber-400 text-xs font-bold mb-3 tracking-wider">
+          <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+          2026 RESULTS
+        </div>
+        <h2 class="text-3xl md:text-4xl font-extrabold text-white mb-3 tracking-tight">명예의 전당</h2>
+        <p class="text-slate-400 text-sm">제10회 공군참모총장배 드론 종합경연대회 공식 결과</p>
+      </div>
 
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        
+        <!-- 1. 드론레이싱 부문 결과 -->
+        <div class="bg-slate-900 border border-slate-700/80 rounded-2xl p-6 shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+          <div class="flex items-center gap-3 mb-6 border-b border-slate-800 pb-4">
+            <i class="ph-fill ph-trophy text-3xl text-cyan-400"></i>
+            <h3 class="text-xl font-bold text-white">드론레이싱 본선 결과</h3>
+          </div>
+          
+          <div class="space-y-3">
+            <!-- 1위 -->
+            <div class="flex items-center justify-between p-4 bg-gradient-to-r from-amber-500/20 to-transparent border border-amber-500/30 rounded-xl">
+              <div class="flex items-center gap-4">
+                <div class="w-8 text-center font-black text-amber-400 text-lg">1위</div>
+                <div id="result-racing-1" class="font-bold text-white text-lg">-</div>
+              </div>
+              <div class="text-right">
+                <div class="text-amber-400 font-bold text-sm">상금 200만원</div>
+                <div class="text-slate-400 text-[11px]">공군참모총장상</div>
+              </div>
+            </div>
+            <!-- 2위 -->
+            <div class="flex items-center justify-between p-4 bg-slate-800/50 border border-slate-700 rounded-xl">
+              <div class="flex items-center gap-4">
+                <div class="w-8 text-center font-black text-slate-300 text-lg">2위</div>
+                <div id="result-racing-2" class="font-bold text-white text-lg">-</div>
+              </div>
+              <div class="text-right">
+                <div class="text-slate-300 font-bold text-sm">상금 100만원</div>
+                <div class="text-slate-400 text-[11px]">공군참모총장상</div>
+              </div>
+            </div>
+            <!-- 3위 -->
+            <div class="flex items-center justify-between p-4 bg-slate-800/50 border border-slate-700 rounded-xl">
+              <div class="flex items-center gap-4">
+                <div class="w-8 text-center font-black text-orange-400 text-lg">3위</div>
+                <div id="result-racing-3" class="font-bold text-white text-lg">-</div>
+              </div>
+              <div class="text-right">
+                <div class="text-orange-400 font-bold text-sm">상금 80만원</div>
+                <div class="text-slate-400 text-[11px]">공군참모총장상</div>
+              </div>
+            </div>
+            <!-- 4위 -->
+            <div class="flex items-center justify-between p-4 bg-slate-800/30 border border-slate-800 rounded-xl">
+              <div class="flex items-center gap-4">
+                <div class="w-8 text-center font-bold text-slate-500 text-base">4위</div>
+                <div id="result-racing-4" class="font-semibold text-slate-300 text-base">-</div>
+              </div>
+              <div class="text-right">
+                <div class="text-slate-400 font-semibold text-xs">상금 50만원</div>
+                <div class="text-slate-500 text-[11px]">공군참모총장상</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. 시뮬레이션 이벤트 결과 -->
+        <div class="bg-slate-900 border border-slate-700/80 rounded-2xl p-6 shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+          <div class="flex items-center gap-3 mb-6 border-b border-slate-800 pb-4">
+            <i class="ph-fill ph-game-controller text-3xl text-indigo-400"></i>
+            <div class="flex-1">
+              <h3 class="text-xl font-bold text-white">드론엔터존 시뮬레이션 이벤트</h3>
+              <p class="text-xs text-slate-400 mt-0.5">매일 최고의 랩타임을 기록한 관람객 1인 선정</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <!-- 1일차 -->
+            <div class="bg-indigo-950/20 border border-indigo-500/20 rounded-xl p-4 flex flex-col justify-center">
+              <div id="sim-date-1" class="text-indigo-400 text-xs font-bold mb-2">-</div>
+              <div class="flex justify-between items-end mb-1">
+                <div class="text-white font-bold text-base"><span id="sim-name-1">-</span> <span class="text-xs font-normal text-slate-400">(<span id="sim-phone-1">-</span>)</span></div>
+              </div>
+              <div class="text-cyan-300 font-mono font-bold text-lg"><i class="ph-bold ph-timer mr-1"></i><span id="sim-time-1">-</span></div>
+            </div>
+            <!-- 2일차 -->
+            <div class="bg-indigo-950/20 border border-indigo-500/20 rounded-xl p-4 flex flex-col justify-center">
+              <div id="sim-date-2" class="text-indigo-400 text-xs font-bold mb-2">-</div>
+              <div class="flex justify-between items-end mb-1">
+                <div class="text-white font-bold text-base"><span id="sim-name-2">-</span> <span class="text-xs font-normal text-slate-400">(<span id="sim-phone-2">-</span>)</span></div>
+              </div>
+              <div class="text-cyan-300 font-mono font-bold text-lg"><i class="ph-bold ph-timer mr-1"></i><span id="sim-time-2">-</span></div>
+            </div>
+            <!-- 3일차 -->
+            <div class="bg-indigo-950/20 border border-indigo-500/20 rounded-xl p-4 flex flex-col justify-center">
+              <div id="sim-date-3" class="text-indigo-400 text-xs font-bold mb-2">-</div>
+              <div class="flex justify-between items-end mb-1">
+                <div class="text-white font-bold text-base"><span id="sim-name-3">-</span> <span class="text-xs font-normal text-slate-400">(<span id="sim-phone-3">-</span>)</span></div>
+              </div>
+              <div class="text-cyan-300 font-mono font-bold text-lg"><i class="ph-bold ph-timer mr-1"></i><span id="sim-time-3">-</span></div>
+            </div>
+            <!-- 4일차 -->
+            <div class="bg-indigo-950/20 border border-indigo-500/20 rounded-xl p-4 flex flex-col justify-center">
+              <div id="sim-date-4" class="text-indigo-400 text-xs font-bold mb-2">-</div>
+              <div class="flex justify-between items-end mb-1">
+                <div class="text-white font-bold text-base"><span id="sim-name-4">-</span> <span class="text-xs font-normal text-slate-400">(<span id="sim-phone-4">-</span>)</span></div>
+              </div>
+              <div class="text-cyan-300 font-mono font-bold text-lg"><i class="ph-bold ph-timer mr-1"></i><span id="sim-time-4">-</span></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- [★추가됨] 상금 및 경품 문의 안내 배너 -->
+      <div class="mt-8 max-w-3xl mx-auto flex items-center justify-center gap-2 text-xs md:text-sm text-slate-300 bg-slate-900/60 border border-slate-700/80 p-4 rounded-xl shadow-lg">
+        <i class="ph-fill ph-info text-cyan-400 text-lg"></i>
+		<span>상금 및 이벤트 경품 수령과 관련된 상세 문의는 이메일(<a href="mailto:planbox.kr@gmail.com" class="text-cyan-400 hover:text-cyan-300 font-semibold underline underline-offset-4 transition-colors">planbox.kr@gmail.com</a>)을 이용해 주시기 바랍니다.</span>
+      </div>
+
+    </div>
+  </section>
+  
   <!-- 대회 개요 섹션[cite: 8] -->
   <section id="about" class="relative z-10 py-20 border-b border-slate-800 bg-[#0B0F17]/90 backdrop-blur-sm">
     <div class="max-w-5xl mx-auto px-6">
